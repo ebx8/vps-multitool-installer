@@ -2,6 +2,7 @@
 
 set -e
 
+# URL base cruda de tu propio repo
 REPO_RAW="https://raw.githubusercontent.com/ebx8/vps-multitool-installer/main"
 
 echo -e "\033[1;32m==== Script SSH + Proxy + WebSocket + UDP por ebx ====\033[0m"
@@ -29,7 +30,8 @@ apt install -y nodejs npm
 mkdir -p /opt/wsproxy
 wget -O /opt/wsproxy/ws-relax.js "$REPO_RAW/ws-relax.js"
 cd /opt/wsproxy
-npm install
+# No hay dependencias npm, pero si algún día las hay, deja este comando:
+npm install || true
 ufw allow 80/tcp
 iptables -I INPUT -p tcp --dport 80 -j ACCEPT
 systemctl stop apache2 2>/dev/null || true
