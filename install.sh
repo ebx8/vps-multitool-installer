@@ -2,6 +2,8 @@
 
 set -e
 
+REPO_RAW="https://raw.githubusercontent.com/ebx8/vps-multitool-installer/main"
+
 echo -e "\033[1;32m==== Script SSH + Proxy + WebSocket + UDP por ebx ====\033[0m"
 echo "Actualizando sistema y paquetes base..."
 apt update && apt upgrade -y
@@ -19,13 +21,13 @@ systemctl enable dropbear && systemctl restart dropbear
 
 echo -e "\n\033[1;34m--- Instalando Squid Proxy ---\033[0m"
 apt install -y squid
-cp squid.conf /etc/squid/squid.conf || wget -O /etc/squid/squid.conf https://raw.githubusercontent.com/roosterkid/openproxylist/main/squid/squid.conf
+wget -O /etc/squid/squid.conf "$REPO_RAW/squid.conf"
 systemctl enable squid && systemctl restart squid
 
 echo -e "\n\033[1;34m--- Instalando WebSocket SSH Proxy (modo relax) ---\033[0m"
 apt install -y nodejs npm
 mkdir -p /opt/wsproxy
-cp ws-relax.js /opt/wsproxy/ws-relax.js
+wget -O /opt/wsproxy/ws-relax.js "$REPO_RAW/ws-relax.js"
 cd /opt/wsproxy
 npm install
 ufw allow 80/tcp
