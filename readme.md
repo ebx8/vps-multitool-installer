@@ -5,7 +5,8 @@
 ## Instalación rápida
 
 ```bash
-wget https://github.com/tuusuario/vps-multitool-installer/raw/main/install.sh
+wget https://github.com/ebx8/vps-multitool-installer/install.sh
+
 chmod +x install.sh
 sudo ./install.sh
 
