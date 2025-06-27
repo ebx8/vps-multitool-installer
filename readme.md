@@ -5,10 +5,8 @@
 ## Instalación rápida
 
 ```bash
-wget https://github.com/ebx8/vps-multitool-installer/install.sh
+wget https://raw.githubusercontent.com/ebx8/vps-multitool-installer/main/install.sh && chmod +x install.sh && ./install.sh
 
-chmod +x install.sh
-sudo ./install.sh
 
 
 ## ¿Cómo dejar el WebSocket SSH corriendo SIEMPRE?
