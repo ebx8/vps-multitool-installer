@@ -5,7 +5,7 @@ set -e
 # URL base cruda de tu propio repo
 REPO_RAW="https://raw.githubusercontent.com/ebx8/vps-multitool-installer/main"
 
-echo -e "\033[1;32m==== Script SSH + Proxy + WebSocket + UDP por ebx ====\033[0m"
+echo -e "\033[1;32m==== Script SSH + Proxy + WebSocket por ebx ====\033[0m"
 echo "Actualizando sistema y paquetes base..."
 apt update && apt upgrade -y
 apt install -y sudo curl wget ufw iptables nano unzip git
@@ -30,17 +30,12 @@ apt install -y nodejs npm
 mkdir -p /opt/wsproxy
 wget -O /opt/wsproxy/ws-relax.js "$REPO_RAW/ws-relax.js"
 cd /opt/wsproxy
-# No hay dependencias npm, pero si algún día las hay, deja este comando:
+# Si algún día usas dependencias, esto las instala (no afecta si no hay package.json)
 npm install || true
 ufw allow 80/tcp
 iptables -I INPUT -p tcp --dport 80 -j ACCEPT
 systemctl stop apache2 2>/dev/null || true
 nohup node ws-relax.js > /dev/null 2>&1 &
-
-echo -e "\n\033[1;34m--- Instalando BADVPN UDPGW ---\033[0m"
-wget -O /usr/bin/badvpn-udpgw https://github.com/ambrop72/badvpn/releases/download/v1.999.130/badvpn-udpgw
-chmod +x /usr/bin/badvpn-udpgw
-nohup badvpn-udpgw --listen-addr 127.0.0.1:7300 > /dev/null 2>&1 &
 
 echo -e "\n\033[1;34m--- Instalando STUNNEL4 (SSL) ---\033[0m"
 apt install -y stunnel4
@@ -71,7 +66,6 @@ ufw allow 110/tcp
 ufw allow 222/tcp
 ufw allow 3128/tcp
 ufw allow 8080/tcp
-ufw allow 7300/udp
 ufw --force enable
 
 echo -e "\n\033[1;32m==== Instalación COMPLETA ====\033[0m"
@@ -80,7 +74,6 @@ echo " - SSH: 22, 443"
 echo " - Dropbear: 110, 443, 222"
 echo " - Squid: 3128, 8080"
 echo " - WebSocket SSH (relax): 80"
-echo " - BADVPN UDPGW: 7300"
 echo " - SSL: 443"
 echo ""
 echo "Verifica dominio, Cloudflare Naranja activo y puertos abiertos."
